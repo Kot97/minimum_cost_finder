@@ -16,7 +16,7 @@ public class SearchTable {
             dataAccessor.loadData();
         }
 
-        Path path = costTables.get(connection).get(target);
+        Path path = costTables.get(connection).getMinimumCostPath(target);
         return String.format("Minimum cost path length: %d\nMinimum cost path: %s",
                                     path.length(), path.toString());
     }

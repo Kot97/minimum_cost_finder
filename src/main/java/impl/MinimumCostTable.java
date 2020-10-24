@@ -24,7 +24,7 @@ public class MinimumCostTable {
         results.get(source).append(graph.getNode(source));
     }
 
-    public Path get(Integer target) {
+    public Path getMinimumCostPath(Integer target) {
         return results.get(target);
     }
 
@@ -41,8 +41,7 @@ public class MinimumCostTable {
     }
 
     private PriorityQueue<PriorityQueueNode> initPriorityQueue() {
-        PriorityQueue<PriorityQueueNode> priorityQueue = new PriorityQueue<>(
-                Comparator.comparing(v -> v.cost));
+        PriorityQueue<PriorityQueueNode> priorityQueue = new PriorityQueue<>(Comparator.comparing(v -> v.cost));
         for (Node node : graph.nodes) {
             if (node.index != source) {
                 priorityQueue.add(new PriorityQueueNode(node, Float.MAX_VALUE));
@@ -58,19 +57,20 @@ public class MinimumCostTable {
         }
     }
 
-    private void relaxation(PriorityQueueNode actual, PriorityQueueNode neighbor) {
-        if (actual.cost + Graph.getCostBetween(actual.graphNode, neighbor.graphNode) < neighbor.cost) {
-            results.replace(neighbor.graphNode.index, new Path(results.get(actual.graphNode.index)).append(neighbor.graphNode));
-            neighbor.cost = actual.cost + Graph.getCostBetween(actual.graphNode, neighbor.graphNode);
-        }
-    }
-
     private ArrayList<PriorityQueueNode> getNeighbors(PriorityQueueNode actual, PriorityQueue<PriorityQueueNode> priorityQueue) {
         ArrayList<PriorityQueueNode> neighbors = new ArrayList<>(5);
         for (Edge edge : actual.graphNode.outputEdges) {
             neighbors.add(getPriorityQueueNode(edge.target, priorityQueue));
         }
         return neighbors;
+    }
+
+    private void relaxation(PriorityQueueNode actual, PriorityQueueNode neighbor) {
+        Path potentiallyFasterPath = new Path(results.get(actual.graphNode.index)).append(neighbor.graphNode);
+        if (potentiallyFasterPath.getCost() < neighbor.cost) {
+            results.replace(neighbor.graphNode.index, potentiallyFasterPath);
+            neighbor.cost = potentiallyFasterPath.getCost();
+        }
     }
 
     private PriorityQueueNode getPriorityQueueNode(Node actual, PriorityQueue<PriorityQueueNode> priorityQueue) {

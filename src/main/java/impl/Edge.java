@@ -1,7 +1,5 @@
 package impl;
 
-import static java.lang.Math.abs;
-
 public class Edge {
     Node target;
     float bandwidth;

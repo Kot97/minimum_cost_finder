@@ -1,7 +1,7 @@
 package impl;
 
-import javax.ws.rs.NotFoundException;
 import java.util.ArrayList;
+import javax.ws.rs.NotFoundException;
 
 import static java.lang.Math.abs;
 
@@ -23,7 +23,7 @@ public class Node {
     }
 
     public float cost(Edge edge) {
-        if (isStartNode() || isEndNode()) {
+        if (isEndNode()) {
             return 0;
         }
         float sum = 0;
@@ -33,11 +33,7 @@ public class Node {
         return abs(edge.bandwidth - sum);
     }
 
-    public boolean isStartNode() {
-        return index == 1;
-    }
-
-    public boolean isEndNode() {
+    private boolean isEndNode() {
         return outputEdges.isEmpty();
     }
 }

@@ -26,16 +26,18 @@ public class Path {
         return nodes.size();
     }
 
-    public void clear() {
-        nodes.clear();
-    }
-
-    public Float cost() {
-        float sum = 0;
-        for (int i = 0; i < length() - 1; i++) {
-            sum += Graph.getCostBetween(nodes.get(i), nodes.get(i + 1));
+    public float getCost() {
+        int length = length();
+        if (length <= 1) {
+            return 0f;
         }
-        return sum;
+        float sum = 0;
+        Edge edge;
+        for (int i = 0; i < length - 2; i++) {
+            edge = nodes.get(i).getEdgeTo(nodes.get(i + 1));
+            sum += edge.cost() + nodes.get(i + 1).cost(edge);
+        }
+        return sum + nodes.get(length - 2).getEdgeTo(nodes.get(length - 1)).cost();
     }
 
     public String toString() {
