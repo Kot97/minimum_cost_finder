@@ -4,10 +4,15 @@ import javax.ws.rs.NotFoundException;
 import java.util.HashMap;
 
 public class SearchTable {
-    private static HashMap<String, MinimumCostTable> costTables = new HashMap<>(3);
+    static HashMap<String, MinimumCostTable> costTables = new HashMap<>(3);
+    private static final String FORMAT = "%s%s%n%s%f";
+    private static final String PATH_DESCRIPTION = "Minimum cost path : ";
+    private static final String COST_DESCRIPTION = "Minimum cost: ";
 
     static void add(String connection, Graph graph) {
-        costTables.put(connection, new MinimumCostTable(graph));
+        MinimumCostTable minimumCostTable = new MinimumCostTable(graph);
+        minimumCostTable.compute();
+        costTables.put(connection, minimumCostTable);
     }
 
     public static String getResult(String connection, int target) {
@@ -17,8 +22,7 @@ public class SearchTable {
         }
 
         Path path = costTables.get(connection).getMinimumCostPath(target);
-        return String.format("Minimum cost path length: %d\nMinimum cost path: %s",
-                                    path.length(), path.toString());
+        return String.format(FORMAT, PATH_DESCRIPTION, path.toString(), COST_DESCRIPTION, path.getCost());
     }
 
     public static int clearAll() {
@@ -27,7 +31,7 @@ public class SearchTable {
         return count;
     }
 
-    public static void clear(String connection) throws NotFoundException {
+    public static void clear(String connection) {
         if (costTables.remove(connection) == null) {
             throw new NotFoundException(connection + " related search table not found");
         }

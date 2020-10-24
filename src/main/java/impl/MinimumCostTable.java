@@ -35,8 +35,9 @@ public class MinimumCostTable {
 
     public void compute() {
         PriorityQueue<PriorityQueueNode> priorityQueue = initPriorityQueue();
+        HashMap<Integer, PriorityQueueNode> lookupTable = initLookupTable(priorityQueue);
         while (!priorityQueue.isEmpty()) {
-            relaxNeighbours(priorityQueue.poll(), priorityQueue);
+            relaxNeighbours(priorityQueue.poll(), lookupTable);
         }
     }
 
@@ -51,35 +52,35 @@ public class MinimumCostTable {
         return priorityQueue;
     }
 
-    private void relaxNeighbours(PriorityQueueNode actual, PriorityQueue<PriorityQueueNode> priorityQueue) {
-        for (PriorityQueueNode neighbor : getNeighbors(actual, priorityQueue)) {
+    private HashMap<Integer, PriorityQueueNode> initLookupTable(PriorityQueue<PriorityQueueNode> priorityQueue) {
+        HashMap<Integer, PriorityQueueNode> lookupTable = new HashMap<>(priorityQueue.size());
+        for (PriorityQueueNode priorityQueueNode : priorityQueue) {
+            lookupTable.put(priorityQueueNode.graphNode.index, priorityQueueNode);
+        }
+        return lookupTable;
+    }
+
+    private void relaxNeighbours(PriorityQueueNode actual, HashMap<Integer, PriorityQueueNode> lookupTable) {
+        for (PriorityQueueNode neighbor : getNeighbors(actual, lookupTable)) {
             relaxation(actual, neighbor);
         }
     }
 
-    private ArrayList<PriorityQueueNode> getNeighbors(PriorityQueueNode actual, PriorityQueue<PriorityQueueNode> priorityQueue) {
+    private ArrayList<PriorityQueueNode> getNeighbors(PriorityQueueNode actual, HashMap<Integer, PriorityQueueNode> lookupTable) {
         ArrayList<PriorityQueueNode> neighbors = new ArrayList<>(5);
         for (Edge edge : actual.graphNode.outputEdges) {
-            neighbors.add(getPriorityQueueNode(edge.target, priorityQueue));
+            neighbors.add(lookupTable.get(edge.target.index));
         }
         return neighbors;
     }
 
     private void relaxation(PriorityQueueNode actual, PriorityQueueNode neighbor) {
         Path potentiallyFasterPath = new Path(results.get(actual.graphNode.index)).append(neighbor.graphNode);
-        if (potentiallyFasterPath.getCost() < neighbor.cost) {
+        float potentiallyLowerCost = potentiallyFasterPath.getCost();
+        if (potentiallyLowerCost < neighbor.cost) {
             results.replace(neighbor.graphNode.index, potentiallyFasterPath);
-            neighbor.cost = potentiallyFasterPath.getCost();
+            neighbor.cost = potentiallyLowerCost;
         }
-    }
-
-    private PriorityQueueNode getPriorityQueueNode(Node actual, PriorityQueue<PriorityQueueNode> priorityQueue) {
-        for (PriorityQueueNode priorityQueueNode : priorityQueue) {
-            if (priorityQueueNode.graphNode.index == actual.index) {
-                return priorityQueueNode;
-            }
-        }
-        return null;
     }
 
     private static class PriorityQueueNode {

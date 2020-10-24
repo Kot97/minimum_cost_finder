@@ -7,10 +7,11 @@ import static java.lang.Math.abs;
 
 public class Node {
     int index;
-    ArrayList<Edge> outputEdges = new ArrayList<>(4);
+    ArrayList<Edge> outputEdges;
 
     public Node(int index) {
         this.index = index;
+        outputEdges = new ArrayList<>(4);
     }
 
     public Edge getEdgeTo(Node node) {
