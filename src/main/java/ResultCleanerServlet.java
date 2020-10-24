@@ -1,11 +1,11 @@
+import impl.SearchTable;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-
-import impl.SearchTable;
 
 @WebServlet("/clear")
 public class ResultCleanerServlet extends HttpServlet {
@@ -21,8 +21,7 @@ public class ResultCleanerServlet extends HttpServlet {
                 SearchTable.clear(connection);
                 resp.getWriter().write(connection + " related search table deleted");
             }
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             resp.getWriter().write("Error occurred: " + exception.getMessage());
         }
     }

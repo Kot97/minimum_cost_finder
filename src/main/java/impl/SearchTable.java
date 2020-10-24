@@ -5,12 +5,16 @@ import java.util.HashMap;
 
 public class SearchTable {
     static HashMap<String, MinimumCostTable> costTables = new HashMap<>(3);
-    private static final String FORMAT = "%s%s%n%s%f";
-    private static final String PATH_DESCRIPTION = "Minimum cost path : ";
-    private static final String COST_DESCRIPTION = "Minimum cost: ";
+    static final String FORMAT = "%s%s%n%s%f";
+    static final String PATH_DESCRIPTION = "Minimum cost path : ";
+    static final String COST_DESCRIPTION = "Minimum cost: ";
 
     static void add(String connection, Graph graph) {
-        MinimumCostTable minimumCostTable = new MinimumCostTable(graph);
+        add(connection, graph, 1);
+    }
+
+    static void add(String connection, Graph graph, int source) {
+        MinimumCostTable minimumCostTable = new MinimumCostTable(graph, source);
         minimumCostTable.compute();
         costTables.put(connection, minimumCostTable);
     }

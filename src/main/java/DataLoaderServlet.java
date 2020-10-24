@@ -16,8 +16,7 @@ public class DataLoaderServlet extends HttpServlet {
             DataAccessor dataAccessor = new DataAccessor(connection);
             dataAccessor.loadData();
             resp.getWriter().write("Data loaded successfully");
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             resp.getWriter().write("Error occurred: " + exception.getMessage());
         }
     }
