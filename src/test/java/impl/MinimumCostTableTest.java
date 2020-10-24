@@ -3,7 +3,7 @@ package impl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 class MinimumCostTableTest {
     Graph graph;
@@ -13,12 +13,12 @@ class MinimumCostTableTest {
     void setUp() {
         Path.separator = ".";
         graph = CommonData.getGraphOne();
-        costTable = new MinimumCostTable(graph);
+        costTable = new MinimumCostTable(graph, 0);
     }
 
     @Test
     void DijkstraModifiedAlgorithmTest() {
         costTable.compute();
-        assertEquals(0.001, costTable.get(4).cost(), 0.0001);
+        assertEquals(0.001, costTable.get(3).cost(), 0.0001);
     }
 }

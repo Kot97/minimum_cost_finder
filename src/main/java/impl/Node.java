@@ -13,15 +13,7 @@ public class Node {
         this.index = index;
     }
 
-    public ArrayList<Node> getNeighbors() {
-        ArrayList<Node> neighbors = new ArrayList<>(4);
-        for (Edge edge : outputEdges) {
-            neighbors.add(edge.target);
-        }
-        return neighbors;
-    }
-
-    public Edge getEdgeTo(Node node) throws NotFoundException {
+    public Edge getEdgeTo(Node node) {
         for (Edge edge : outputEdges) {
             if (edge.target == node) {
                 return edge;
@@ -46,6 +38,6 @@ public class Node {
     }
 
     public boolean isEndNode() {
-        return outputEdges.size() == 0;
+        return outputEdges.isEmpty();
     }
 }
